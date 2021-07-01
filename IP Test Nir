@@ -1,0 +1,14 @@
+from ip2geotools.databases.noncommercial import DbIpCity
+import pandas
+
+df = pandas.read_csv('ip only.csv')
+ip_list=df["ip"].tolist()
+countries = []
+regions=[]
+for ip in ip_list:
+    ip=ip.strip()
+    response = DbIpCity.get(ip, api_key="free")
+    countries.append(response.country)
+    regions.append(response.region)
+ip_country=pandas.DataFrame({'IP':ip_list,'Country':countries,"Region":regions})
+ip_country.to_csv("IP+Country.csv")
